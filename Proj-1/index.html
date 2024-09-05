@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>Project 1</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Project 1: Images of the Russian Empire: Colorizing the Prokudin-Gorskii Photo Collection</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block">Ryan Mathew<br>September 3rd, 2024</span>
+                  </div>
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/ryanmathew-berkeley/ryanmathew-berkeley.github.io" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Website Repo</span>
+                  </a>
+                </span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview</h2>
+        <div class="content has-text-justified">
+          <p>
+            In 1907, Sergei Mikhailovich Prokudin-Gorskii travelled to the Russian Empire to photograph various subjects. 
+            He captured everything in three different exposures of red, green, and blue. 
+            Although, there wasn't a way to print color photographs at that time, the Library of Congress obtained his collection of glass negatives and we will attempt to overlay the 3 different color channels for each scene and produce a colorized and aligned image in this project.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Naive Euclidean Alignment</h2>
+      <div class="content has-text-justified">
+        <p>
+          A first attempt to simply overlay all the channels will produce colorized but rather unaligned images.
+          Because of this, we need to find a proper alignment for each red and green channel onto the blue channel. 
+          This is as simple as finding the best x and y pixel translation for each channel. 
+          We can exhaustively iterate over a range [-15, 15] for both x and y and score each shift compared to the blue channel using the L2 Norm, also known as the Euclidean distance, on the pixels. 
+          It's also important to note that we should crop the images before trying different shifts to avoid fitting to the borders which can affect our results.
+          After trying these steps on both the red and green channels, we can obtain and apply the best shifts to each respective color channel and overlay it on the blue channel to produce properly aligned and colorized images as shown below.
+        </p>
+      </div>
+      <div id="alignment" class="alignment">
+        <div class="alignment-item">
+          <img src="static/images/out_path/out_cathedral.jpg" alt="Cathedral"/>
+          <h2 class="alignment-text">
+            <b>Cathedral R: (12, 3) G: (5, 2)</b>
+          </h2>
+        </div>
+        <div class="alignment-item">
+          <img src="static/images/out_path/out_monastery.jpg" alt="Monastery"/>
+          <h2 class="alignment-text">
+            <b>Monastery R: (3, 2) G: (-3, 2)</b>
+          </h2>
+        </div>
+        <div class="alignment-item">
+          <img src="static/images/out_path/out_tobolsk.jpg" alt="Tobolsk"/>
+          <h2 class="alignment-text">
+            <b>Tobolsk R: (6, 3) G: (3, 3)</b>
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Youtube video -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <!-- Paper video. -->
+      <h2 class="title is-3">Image Pyramid Alignment</h2>
+      <div class="content has-text-justified">
+        <p>
+          While this exhaustive iteration over a small window works well for JPG files, it would require a larger window for high-resolution scans which can take longer and be quite inefficient.
+          For this reason, we can instead utilize an image pyramid alignment approach.
+          This approach takes advantage of the idea we saw earlier that smaller images are easier to exhaustively search over to find the best shift.
+          We will first downscale the original image by 0.5 using sk.transform.rescale and store each downscaled image. 
+          This will be repeated for all color channels until the image's height or width is less than 200px.
+          Next, we will start from the coarsest image and euclidean align it with the coarsest image of blue's downscaled images to find the best shift.
+          We will repeat this for both red and green, each time moving from the coarse images to the finer ones and scaling the shift from the previous image by 2 and adding the new shifts until we have our final shifts on the highest resolution. 
+          The results from image pyramid alignment and the shifts used to achieve it for each image are shown below.
+        </p>
+      </div>
+      <div id="canny">
+        <div class="img-box">
+          <img src="static/images/out_path/out_church.tif.jpg" alt="Cathedral"/>
+          <h2><b>church.tif</b></h2>
+          <h2><b>R: (58, -4) G: (25, 4)</b></h2>
+        </div>
+        <div class="img-box">
+          <img src="static/images/out_path/out_emir.tif.jpg" alt="Monastery"/>
+          <h2><b>emir.tif</b></h2>
+          <h2><b>R: (99, -205) G: (49, 24)</b></h2>
+        </div>
+      </div>
+
+      <div id="canny">
+        <div class="img-box">
+          <img src="static/images/out_path/out_harvesters.tif.jpg" alt="Cathedral"/>
+          <h2><b>harvesters.tif</b></h2>
+          <h2><b>R: (124, 14) G: (60, 17)</b></h2>
+        </div>
+        <div class="img-box">
+          <img src="static/images/out_path/out_icon.tif.jpg" alt="Monastery"/>
+          <h2><b>icon.tif</b></h2>
+          <h2><b>R: (90, 23) G: (41, 17)</b></h2>
+        </div>
+      </div>
+
+      <div id="canny">
+        <div class="img-box">
+          <img src="static/images/out_path/out_lady.tif.jpg" alt="Cathedral"/>
+          <h2><b>lady.tif</b></h2>
+          <h2><b>R: (112, 12) G: (52, 9)</b></h2>
+        </div>
+        <div class="img-box">
+          <img src="static/images/out_path/out_melons.tif.jpg" alt="Monastery"/>
+          <h2><b>melons.tif</b></h2>
+          <h2><b>R: (178, 13) G: (82, 10)</b></h2>
+        </div>
+      </div>
+
+      <div id="canny">
+        <div class="img-box">
+          <img src="static/images/out_path/out_onion_church.tif.jpg" alt="Cathedral"/>
+          <h2><b>onion_church.tif</b></h2>
+          <h2><b>R: (108, 36) G: (52, 26)</b></h2>
+        </div>
+        <div class="img-box">
+          <img src="static/images/out_path/out_sculpture.tif.jpg" alt="Monastery"/>
+          <h2><b>sculpture.tif</b></h2>
+          <h2><b>R: (140, -27) G: (33, -11)</b></h2>
+        </div>
+      </div>
+
+      <div id="canny">
+        <div class="img-box">
+          <img src="static/images/out_path/out_self_portrait.tif.jpg" alt="Cathedral"/>
+          <h2><b>self_portrait.tif</b></h2>
+          <h2><b>R: (176, 37) G: (79, 29)</b></h2>
+        </div>
+        <div class="img-box">
+          <img src="static/images/out_path/out_three_generations.tif.jpg" alt="Monastery"/>
+          <h2><b>three_generations.tif</b></h2>
+          <h2><b>R: (112, 11) G: (53, 14)</b></h2>
+        </div>
+      </div>
+
+      <div id="canny">
+        <div class="img-box">
+          <img src="static/images/out_path/out_train.tif.jpg" alt="Cathedral"/>
+          <h2><b>train.tif</b></h2>
+          <h2><b>R: (87, 32) G: (42, 6)</b></h2>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- End youtube video -->
+
+
+<!-- Video carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Bells & Whistles: Better Alignment</h2>
+      <p>As you may have noticed, Emir.tif is still rather unaligned compared to the other tif files that were able to be aligned through image pyramid alignment. 
+        This is because the images to be matched have different brightness values across different color channels. 
+        In this case, it would be better to use a different metric than the raw pixel difference.
+        I decided to use Canny Edge Detection (sk.feature.canny) to create an edge map of all three color channels. 
+        Once we have the edge maps, we can align them to each other using the image pyramid align with the L2 Norm scoring once again.
+        This allows us to avoid suboptimal shifts that we would otherwise receive using the same scoring system on raw color channels that can have different brightness values.
+        It is worth noting that if we are using edge maps from Canny Edge Detection, we no longer need to crop the images before exhaustively trying shifts as the borders will not appear in the edge maps.
+        As you can see below, using the edge maps results in a better aligned image compared to just using the raw color channels.
+      </p>
+    </div>
+    <div id="canny">
+      <div class="img-box">
+        <img src="static/images/out_path/out_emir.tif.jpg" alt="Cathedral"/>
+        <h2><b>Raw Color Channels + Image Pyramid Alignment</b></h2>
+        <h2><b>R: (99, -205) G: (49, 24)</b></h2>
+      </div>
+      <div class="img-box">
+        <img src="static/images/out_path/out_emirTIF_edgeAligned.jpg" alt="Monastery"/>
+        <h2><b>Canny Edge Detection + Image Pyramid Alignment</b></h2>
+        <h2><b>R: (107, 40) G: (49, 23)</b></h2>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End video carousel -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
