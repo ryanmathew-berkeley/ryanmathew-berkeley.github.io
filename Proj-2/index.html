@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>Project 1</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Project 2: Fun with Filters and Frequencies!</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block">Ryan Mathew<br>September 21st, 2024</span>
+                  </div>
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/ryanmathew-berkeley/ryanmathew-berkeley.github.io" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Website Repo</span>
+                  </a>
+                </span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this project, we will experiment with frequencies and their applications to various image processing and image manipulation techniques. 
+            We will start with edge detection through utilizing the finite difference operator as well as the Derivative of Gaussian (DoG) Filter.
+            From there, we will explore image sharpening, hybrid images, and image blending 
+
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 1: Fun with Filters</h2>
+      <div class="content has-text-justified">
+        <b>Part 1.1: Finite Difference Operator</b>
+        <p>
+          We can utilize the finite difference operators (Dx = [1, -1] and Dy = [[1], [-1]]) to get the partial derivatives of the image. 
+          If we convolve our cameraman image with the Dx filter, we can identify the vertical edges. 
+          If we convolve using the Dy filter, we can identify the horizontal edges instead. 
+          From here, we can calculate the Gradient Magnitude Image using the formula np.sqrt(partial_deriv_x**2 + partial_deriv_y**2). 
+          To better visualize this, we can binarize the gradient magnitude image values to be either 1 or 0 if they are greater than a threshold, which I chose to be 0.25
+        </p>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/1.1/cameraman.png" alt="Image 1">
+              <div class="caption">cameraman.png</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.1/x_convolved_1-1.jpg" alt="Image 2">
+              <div class="caption">Dx (Vertical Edges)</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.1/y_convolved_1-1.jpg" alt="Image 3">
+              <div class="caption">Dy (Horizontal Edges)</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.1/gradient_magnitude_img_1-1.jpg" alt="Image 4">
+              <div class="caption">Gradient Magnitude</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.1/binarized_gradient_magnitude_img_1-1.jpg" alt="Image 5">
+              <div class="caption">Binarized Gradient Magnitude</div>
+          </div>
+      </div>
+
+
+        <b>Part 1.2: Derivative of Gaussian (DoG) Filter</b>
+        <p>
+          We can see that there's a lot of noise in the binarized edge image so we will now first blur the cameraman image before convolving it with the finite difference operators. 
+          A Gaussian filter can be used to blur the image. I chose kernel size = 7 and sigma = 1. 
+          When we take our cameraman image and convolve it with a 2D Gaussian kernel, it will 'smooth' or blur the image slightly reducing drastic changes which cause 'noise' in edge detection. 
+          Now, we can repeat the steps from above of getting the partial derivatives and gradient magnitude image.
+          For the binarized gradient magnitude after blurring, I chose the threshold to be 0.08.
+          Compared to the edge map produced by the previous part, there's much less noise which produces sharper, thicker edges.  
+        </p>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/1.2/blurred_cameraman.jpg" alt="Image 1">
+              <div class="caption">Blurred Cameraman</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.2/x_convolved_1-2.jpg" alt="Image 2">
+              <div class="caption">Dx Blurred Convolution (Vertical Edges)</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.2/y_convolved_1-2.jpg" alt="Image 3">
+              <div class="caption">Dy Blurred Convolution (Horizontal Edges)</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.2/gradient_magnitude_img_1-2.jpg" alt="Image 4">
+              <div class="caption">Gradient Magnitude</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.2/binarized_gradient_magnitude_img_1-2.jpg" alt="Image 5">
+              <div class="caption">Binarized Gradient Magnitude</div>
+          </div>
+        </div>
+
+        <p>
+          This process can be sped up slightly by noting that convolutions are associative. 
+          This allows us to first convolve the finite difference operators with the 2D Gaussian Kernel.
+          These can then be convolved with the original (unblurred) cameraman image to create the Derivative of Gaussian (DoG) X and Y convolutions and, as a result, acquire the DoG Gradient Magnitude Image.
+          For the binarized DoG Gradient Magnitude Image threshold, I chose 0.08 again.
+          As we can see, the edge map produced is identical to the unoptimized approach.
+        </p>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/1.2/dogx.jpg" alt="Image 1">
+              <div class="caption">Derivative of Gaussian X Kernel</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/1.2/dogy.jpg" alt="Image 1">
+            <div class="caption">Derivative of Gaussian Y Kernel</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.2/x_convolved_1-2.jpg" alt="Image 2">
+              <div class="caption">Dx Blurred Convolution (Vertical Edges)</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.2/y_convolved_1-2.jpg" alt="Image 3">
+              <div class="caption">Dy Blurred Convolution (Horizontal Edges)</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.2/gradient_magnitude_img_1-2.jpg" alt="Image 4">
+              <div class="caption">Gradient Magnitude</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1.2/binarized_gradient_magnitude_img_1-2.jpg" alt="Image 5">
+              <div class="caption">Binarized Gradient Magnitude</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Youtube video -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <!-- Paper video. -->
+      <h2 class="title is-3">Part 2: Fun with Frequencies!</h2>
+      <div class="content has-text-justified">
+        <b>Part 2.1: Image "Sharpening"</b>
+        <p>
+          Here, we will sharpen a blurry image using the unsharp masking technique. 
+          First, we will convolve the original image of the Taj Mahal with a 2D gaussian Kernel of kernel size = 7 and sigma = 1.
+          This blurs the image and is considered a low pass filter which leaves only the low frequencies behind.
+          If we then subtract the blurred image from the original image, we can obtain the high frequencies of the image.
+          We can then add back the higher frequencies, also scaling it by some value alpha if necessary, to the original image to make it 'sharper'. 
+        </p>
+        <!-- images for taj mahal here -->
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.1/taj.jpg" alt="Image 1">
+              <div class="caption">Taj Mahal</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/taj_blurred.jpg" alt="Image 1">
+            <div class="caption">Taj Blurred</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/taj_high_freq.jpg" alt="Image 1">
+            <div class="caption">Taj High Frequencies</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/taj_sharpened.jpg" alt="Image 1">
+            <div class="caption">Taj Sharpened (alpha = 1)</div>
+          </div>
+        </div>
+
+        <br>
+
+        <p>
+          Here are some other images that I sharpened using the unsharp masking technique.
+        </p>
+        
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.1/bear.jpg" alt="Image 1">
+              <div class="caption">Bears</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/bear_blurred.jpg" alt="Image 1">
+            <div class="caption">Bears Blurred</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/bear_high_freq.png" alt="Image 1">
+            <div class="caption">Bears High Frequencies</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/bear_sharpened.jpg" alt="Image 1">
+            <div class="caption">Bears Sharpened (alpha = 4)</div>
+          </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.1/sheep.jpg" alt="Image 1">
+              <div class="caption">Sheep</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/sheep_blurred.png" alt="Image 1">
+            <div class="caption">Sheep Blurred</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/sheep_high_freq.png" alt="Image 1">
+            <div class="caption">Sheep High Frequencies</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.1/sheep_sharpened.png" alt="Image 1">
+            <div class="caption">Sheep Sharpened (alpha = 2)</div>
+          </div>
+        </div>
+
+        <!-- other images (bear, blurry road) // specify alpha -->
+
+
+        <b>Part 2.2: Hybrid Images</b>
+        <p>
+          In this part, we will create hybrid images which are static images that we can visualize differently based on our viewing distance.
+          Again, we can utilize frequencies of images and specifically how humans are able to see high frequencies closer to an image while the lower frequencies are more perceptible from farther away.
+          We will take 2 images and get the low frequencies of 1 by blurring it using a Gaussian filter. For the other image, we will also blur it to get the low frequencies and subtract the low frequencies from the original image to get the high frequencies.
+          With the low frequencies of image A and the high frequencies of image B, we can add them to create the 'hybrid' image.
+        </p>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.2/DerekPicture.jpg" alt="Image 1">
+              <div class="caption">Derek</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/nutmeg.jpg" alt="Image 1">
+            <div class="caption">Nutmeg</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/derek_low_freq.png" alt="Image 1">
+            <div class="caption">Derek Low Frequencies: Kernel Size = 50 / Sigma = 10</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/nutmeg_high_freq.png" alt="Image 1">
+            <div class="caption">Nutmeg High Frequencies: Kernel Size = 50 / Sigma = 10</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/hybrid_img1.png" alt="Image 1">
+            <div class="caption">Hybrid Image</div>
+          </div>
+        </div>
+
+        <br>
+
+        <p>
+          Here's a hybrid image of Max Verstappen and Charles Leclerc, two of the best Formula 1 drivers on the grid as of lately.
+        </p>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.2/max.jpg" alt="Image 1">
+              <div class="caption">Max Verstappen</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/charles.jpg" alt="Image 1">
+            <div class="caption">Charles Leclerc</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/charles_low_freq.png" alt="Image 1">
+            <div class="caption">Charles Leclerc Low Frequencies: Kernel Size = 50 / Sigma = 5</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/max_high_freq.png" alt="Image 1">
+            <div class="caption">Max Verstappen High Frequencies: Kernel Size = 50 / Sigma = 2</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/hybrid_img2.png" alt="Image 1">
+            <div class="caption">Hybrid Image</div>
+          </div>
+        </div>
+        <br>
+
+
+
+        <!-- FFT, Failures here -->
+
+        <b>FFT Frequency Analysis</b>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.2/max_fft.png" alt="Image 1">
+              <div class="caption">Max Verstappen FFT</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/charles_fft.png" alt="Image 1">
+            <div class="caption">Charles Leclerc FFT</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/charles_low_freq_fft.png" alt="Image 1">
+            <div class="caption">Charles Leclerc Low Frequencies FFT</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/max_high_freq_fft.png" alt="Image 1">
+            <div class="caption">Max Verstappen High Frequencies FFT</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/hybrid_img2_fft.png" alt="Image 1">
+            <div class="caption">Hybrid Image FFT</div>
+          </div>
+        </div>
+
+
+        <br>
+        <p>Frog and Rat Hybrid Image</p>
+        <br>
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.2/frog.jpg" alt="Image 1">
+              <div class="caption">Frog</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/rat.jpg" alt="Image 1">
+            <div class="caption">Rat</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/frog_low_freq.png" alt="Image 1">
+            <div class="caption">Frog Low Frequencies: Kernel Size = 50 / Sigma = 10</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/rat_high_freq.png" alt="Image 1">
+            <div class="caption">Rat High Frequencies: Kernel Size = 50 / Sigma = 8</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/hybrid_img3.png" alt="Image 1">
+            <div class="caption">Hybrid Image</div>
+          </div>
+        </div>
+
+        <br>
+        <p>Here's one that didn't work as well as I wanted it to. I tried to mix Gekko and Wingman but the two input images had different features and backgrounds which also made it difficult to align properly. </p>
+
+        <p>Gekko and Wingman Hybrid Image</p>
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.2/gekko.jpg" alt="Image 1">
+              <div class="caption">Gekko</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/wingman.jpg" alt="Image 1">
+            <div class="caption">Wingman</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/gekko_low_freq.png" alt="Image 1">
+            <div class="caption">Gekko Low Frequencies: Kernel Size = 50 / Sigma = 10</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/wingman_high_freq.png" alt="Image 1">
+            <div class="caption">Wingman High Frequencies: Kernel Size = 50 / Sigma = 3</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.2/hybrid_img4.png" alt="Image 1">
+            <div class="caption">Hybrid Image</div>
+          </div>
+        </div>
+        <br>
+
+
+        
+
+
+        <b>Part 2.3 + 2.4: Gaussian and Laplacian Stacks + Multiresolution Blending</b>
+        <p>
+          We will create Gaussian and Laplacian Stacks which will be useful for blending 2 images together seamlessly. 
+          For the Gaussian stack, keep blurring the image using a Gaussian filter and add it to the list, each time using the image we obtained as the next image to blur. We can choose how many levels G.
+          We will have a list of decreasing low frequencies. This list can now be used to create the Laplacian stack. 
+          We can subtract each pair of Gaussian blurred images to create 1 Laplacian stack image (L[i] = G[i] - G[i + 1]).
+          The last Laplacian stack entry will be the same as the last Gaussian entry (L[-1] = G[-1]). 
+          This allows us to add all the Laplacian stack entries to get the original image back. 
+          We will also need to create a Gaussian stack of the mask as it will be necessary to blend.
+          Once we have the Laplacian stacks of the 2 images we want to blend and the Gaussian stack for the mask, we can use this formula to create a new blended Laplacian stack with 
+          blend_stack[i] = (im1_l_stack_white[i] * g_stack_mask[i]) + (im2_l_stack_black[i] * (1 - g_stack_mask[i])).
+          We can add all the levels of the Laplacian stack to obtain our final blended image!
+        </p>
+
+        <p>I used 5 stacks with a kernel size = 21 and sigma = 7 to achieve the following result</p>
+        <p>Gaussian + Laplacian Stack of Apple</p>
+        <div class="img-gallery">
+          <div class="img-item">
+              <img src="static/images/2.3/a_gaussian[0].png" alt="Gaussian [0]">
+              <caption>Apple Gaussian [0]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/a_gaussian[1].png" alt="Gaussian [1]">
+              <caption>Apple Gaussian [1]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/a_gaussian[2].png" alt="Gaussian [2]">
+              <caption>Apple Gaussian [2]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/a_gaussian[3].png" alt="Gaussian [3]">
+              <caption>Apple Gaussian [3]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/a_gaussian[4].png" alt="Gaussian [4]">
+              <caption>Apple Gaussian [4]</caption>
+          </div>
+        </div>
+
+        <div class="img-gallery">
+          <div class="img-item">
+              <img src="static/images/2.3/a_laplacian[0].png" alt="Laplacian [0]">
+              <caption>Apple Laplacian [0]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/a_laplacian[1].png" alt="Laplacian [1]">
+              <caption>Apple Laplacian [1]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/a_laplacian[2].png" alt="Laplacian [2]">
+              <caption>Apple Laplacian [2]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/a_laplacian[3].png" alt="Laplacian [3]">
+              <caption>Apple Laplacian [3]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/a_laplacian[4].png" alt="Laplacian [4]">
+              <caption>Apple Laplacian [4]</caption>
+          </div>
+        </div>
+
+        <br>
+        
+        <p>Gaussian + Laplacian Stack of Orange</p>
+        <div class="img-gallery">
+          <div class="img-item">
+              <img src="static/images/2.3/o_gaussian[0].png" alt="Gaussian [0]">
+              <caption>Orange Gaussian [0]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/o_gaussian[1].png" alt="Gaussian [1]">
+              <caption>Orange Gaussian [1]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/o_gaussian[2].png" alt="Gaussian [2]">
+              <caption>Orange Gaussian [2]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/o_gaussian[3].png" alt="Gaussian [3]">
+              <caption>Orange Gaussian [3]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/o_gaussian[4].png" alt="Gaussian [4]">
+              <caption>Orange Gaussian [4]</caption>
+          </div>
+        </div>
+
+        <div class="img-gallery">
+          <div class="img-item">
+              <img src="static/images/2.3/o_laplacian[0].png" alt="Laplacian [0]">
+              <caption>Orange Laplacian [0]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/o_laplacian[1].png" alt="Laplacian [1]">
+              <caption>Orange Laplacian [1]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/o_laplacian[2].png" alt="Laplacian [2]">
+              <caption>Orange Laplacian [2]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/o_laplacian[3].png" alt="Laplacian [3]">
+              <caption>Orange Laplacian [3]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/o_laplacian[4].png" alt="Laplacian [4]">
+              <caption>Orange Laplacian [4]</caption>
+          </div>
+        </div>
+
+        <br>
+        
+        <p>Gaussian Stack of Mask</p>
+        <div class="img-gallery">
+          <div class="img-item">
+              <img src="static/images/2.3/m_gaussian[0].png" alt="Gaussian [0]">
+              <caption>Mask Gaussian [0]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/m_gaussian[1].png" alt="Gaussian [1]">
+              <caption>Mask Gaussian [1]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/m_gaussian[2].png" alt="Gaussian [2]">
+              <caption>Mask Gaussian [2]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/m_gaussian[3].png" alt="Gaussian [3]">
+              <caption>Mask Gaussian [3]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/m_gaussian[4].png" alt="Gaussian [4]">
+              <caption>Mask Gaussian [4]</caption>
+          </div>
+        </div>
+
+        <br>
+
+        <p>Blended Laplacian Stack</p>
+        <div class="img-gallery">
+          <div class="img-item">
+              <img src="static/images/2.3/blended_laplacian[0].png" alt="Laplacian [0]">
+              <caption>Blended Laplacian [0]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/blended_laplacian[1].png" alt="Laplacian [1]">
+              <caption>Blended Laplacian Gaussian [1]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/blended_laplacian[2].png" alt="Laplacian [2]">
+              <caption>Blended Laplacian Gaussian [2]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/blended_laplacian[3].png" alt="Laplacian [3]">
+              <caption>Blended Laplacian Gaussian [3]</caption>
+          </div>
+          <div class="img-item">
+              <img src="static/images/2.3/blended_laplacian[4].png" alt="Laplacian [4]">
+              <caption>Blended Laplacian Gaussian [4]</caption>
+          </div>
+        </div>
+
+        <br>
+
+        <p>Blended Image - Oraple!</p>
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.3/oraple.png" alt="Image 1">
+              <div class="caption">Oraple</div>
+          </div>
+        </div>
+
+        <br>
+
+        <p>I wanted to try to improve the blending as a seam can be seen near the top. 
+          This time, I used 100 stacks with kernel size = 100 and sigma = 35.
+        </p>
+
+        <p>Blended Image - Improved Oraple!</p>
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.3/oraple_improved.png" alt="Image 1">
+              <div class="caption">Oraple</div>
+          </div>
+        </div>
+
+        <br>
+
+        <p>
+          Here's the blending algorithm applied on some other images
+        </p>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.4/sunrise.jpeg" alt="Image 1">
+              <div class="caption">Sunrise</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.4/nature.jpeg" alt="Image 1">
+            <div class="caption">Nature</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.4/scenery_mask.jpeg" alt="Image 1">
+            <div class="caption">Horizontal Mask</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.4/blended_1.png" alt="Image 1">
+            <div class="caption">Image Blended (stacks = 100, ksize = 5, sigma = 100)</div>
+          </div>
+        </div>
+
+        <br>
+
+        <p>Here's a blended image of the Las Vegas Sphere and another metallic sphere that utilized an irregular mask</p>
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/2.4/vegas_sphere.jpeg" alt="Image 1">
+              <div class="caption">Las Vegas Sphere</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.4/spherical_obj.png" alt="Image 1">
+            <div class="caption">Metallic Sphere</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.4/sphere_mask.jpeg" alt="Image 1">
+            <div class="caption">Irregular Mask</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/2.4/blended_2.png" alt="Image 1">
+            <div class="caption">Image Blended (stacks = 100, ksize = 5, sigma = 100)</div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End youtube video -->
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Takeaways</h2>
+      <div class="content has-text-justified">
+        <p>
+          The algorithms which were developed in this project are the backbone for various camera and photoshop tools. 
+          Through working on this project, I learned a lot about using image frequencies to enhance and manipulate images. 
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
