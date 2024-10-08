@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>Project 2</title>
+  <link rel="icon" type="image/x-icon" href="static/images/2/mid_way_face.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Project 3: Face Morphing</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block">Ryan Mathew<br>October 5th, 2024</span>
+                  </div>
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/ryanmathew-berkeley/ryanmathew-berkeley.github.io" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Website Repo</span>
+                  </a>
+                </span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this project, I will produce a "morph" of my own face into others' faces, find the average face in a dataset of faces, and create caricatures of myself through extrapolation. 
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 1: Defining Correspondences</h2>
+      <div class="content has-text-justified">
+        <p>
+          In this part, I needed to manually define pairs of correspondences or points on the image of my face as well as George Clooney's. 
+          I first took a picture of myself against a plain background and cropped it to be the same size as George's. 
+          Using the correspondence labeling tool at this <a href="https://cal-cs180.github.io/fa23/hw/proj3/tool.html">link</a>, I labeled key points on both images in a consistent order. 
+          When labeling, I tried to focus on areas like the eyes, ears, mouth, nose, and hair to achieve the best morph results.
+          <br>
+          <br>
+          Here are the triangulations of the points on both my face and George Clooney's which I attained using scipy.spatial.Delaunay
+        </p>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/1/ryan-triangulation.png" alt="Image 1">
+              <div class="caption">Ryan Triangulation</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/1/george-triangulation.png" alt="Image 2">
+              <div class="caption">George Triangulation</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 2: Computing the "Mid-Way Face"</h2>
+      <div class="content has-text-justified">
+        <p>
+          Before we can put together an entire morph sequence, we need to compute the mid-way face of me and George. 
+          First, we will compute the average shape which is found by taking the average of the labeled correspondence sets for both images.
+          Next, we need to figure out where points in the average shape would come from in the original image for each triangle in the triangulation of the average shape.
+          In order to perform this inverse warp, we first need to compute an affine transformation that will solve this equation:
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/2/affine.png" alt="Image 1">
+            </div>
+          </div>
+
+          Now, using the affine transformation matrix A_i that we compute for each triangle T_i, we can dot product A_i with a polygon mask of the triangle T_i area matrix 
+            to get back the x and y coordinates of the original image that correspond with the coordinates in triangle T_i
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/2/inverse_warp.png" alt="Image 1">
+            </div>
+          </div>
+
+          We can then interpolate the values at those coordinates in the original image to the triangle T_i area coordinates. After performing this for every triangle, we will get an output image of the original image warped to the average shape.
+
+          <br>
+
+
+          <br>
+          Finally, using our inverse warp function, we can warp each of the images to the average shape and take the average of the two warped images to average the colors which gives us the "mid-way face".
+
+        </p>
+
+      <div class="image-container">
+        <div class="image-item">
+            <img src="static/images/2/ryan.png" alt="Image 1">
+            <div class="caption">Ryan</div>
+        </div>
+        <div class="image-item">
+          <img src="static/images/2/triangulation_avg.png" alt="Image 1">
+          <div class="caption">Mid-Way Shape Triangulation</div>
+      </div>
+        <div class="image-item">
+            <img src="static/images/2/george.png" alt="Image 2">
+            <div class="caption">George</div>
+        </div>
+      </div>
+      
+
+      <div class="image-container">
+        <div class="image-item">
+            <img src="static/images/2/me_warped_to_avg.png" alt="Image 1">
+            <div class="caption">My Face Warped to Mid-Way Shape</div>
+        </div>
+        <div class="image-item">
+          <img src="static/images/2/mid_way_face.png" alt="Image 1">
+          <div class="caption">Mid-Way Face</div>
+      </div>
+        <div class="image-item">
+            <img src="static/images/2/george_warped_to_avg.png" alt="Image 2">
+            <div class="caption">George's Face Warped to Mid-Way Shape</div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 3: The Morph Sequence</h2>
+      <div class="content has-text-justified">
+        <p>
+          I created a morph sequence which takes a weighted average of the two images and produces 45 frames with weighting from 0 to 1 rather than only 0.5 from the previous part.
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/3/output.gif" alt="Image 1">
+            </div>
+          </div>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 4: The "Mean Face" of a Population</h2>
+      <div class="content has-text-justified">
+        <p>
+          I utilized the FEI face database of 200 aligned and labeled frontal face images to compute the average face of the population.
+          I had to first go through the entire dataset and do some preprocessing to load all the images and compute the average shape. 
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/avg_face_shape.png" alt="Image 1">
+                <div class="caption">Average Face Shape</div>
+            </div>
+          </div>
+
+          <br>
+
+          Then, I had to warp the faces into the average shape. 
+          Finally, I took the average of all the warped faces to achieve the average face of the dataset. 
+
+          <br>
+
+          Here are a few images from the dataset warped to the average shape as well as the average face itself
+          
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/197.png" alt="Image 1">
+                <div class="caption">Image 197</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/197warped.png" alt="Image 1">
+              <div class="caption">Warped to Average Shape</div>
+            </div>
+          </div>
+
+          <div class="image-container">
+            <div class="image-item">
+              <img src="static/images/4/188.png" alt="Image 1">
+              <div class="caption">Image 188</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/188warped.png" alt="Image 1">
+              <div class="caption">Warped to Average Shape</div>
+            </div>
+          </div>
+
+
+          <div class="image-container">
+            <div class="image-item">
+              <img src="static/images/4/116.png" alt="Image 1">
+              <div class="caption">Image 116</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/116warped.png" alt="Image 1">
+              <div class="caption">Warped to Average Shape</div>
+            </div>
+          </div>
+
+
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/avg_face.png" alt="Image 1">
+                <div class="caption">Average Face</div>
+            </div>
+          </div>
+
+          <br>
+
+          I also warped my face to the average face geometry and warped the average face to my face geometry. Before doing this, I had to resize my image and label the correspondences again manually. 
+          The warps came out as expected but because the average face image doesn't have hair to map correspondences with, my hair and forehead look a bit squished. Cropping/zooming into my image to exclude most of my hair would likely have fixed this.
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/self_warped_to_avg.png" alt="Image 1">
+                <div class="caption">My Face Warped to Average Face</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/avg_warped_to_self.png" alt="Image 1">
+              <div class="caption">Average Face Warped to my Face</div>
+          </div>
+          </div>
+
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small"></section>
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 5: Caricatures: Extrapolating from the mean</h2>
+      <div class="content has-text-justified">
+        <p>
+          In this part, I created caricatures of my face by extrapolating from the average face that I found in the previous part. 
+          I first calculated the differences of my face shape from the average face shape. 
+          Then, I scaled these differences by some alpha and added the product to my face shape to create a distorted, caricature like figure. 
+
+
+          <br>
+          <br>
+        
+          my_face_shape + alpha * (my_face_shape - average_face_shape)
+
+          <br>
+          <br>
+
+
+          Here are some of my results at varying alpha.
+
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/5/car_0.25.png" alt="Laplacian [0]">
+                <caption>alpha = 0.25</caption>
+            </div>
+            <div class="image-item">
+                <img src="static/images/5/car_0.5.png" alt="Laplacian [1]">
+                <caption>alpha = 0.5</caption>
+            </div>
+            <div class="image-item">
+                <img src="static/images/5/car_0.75.png" alt="Laplacian [2]">
+                <caption>alpha = 0.75</caption>
+            </div>
+          </div>
+
+          <p> 
+            Increasing the alpha will increase the scaled difference in features so therefore the distortion that is applied to my face image will be greater which is observed in the results.
+          </p>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Bells and Whistles: Changing Gender</h2>
+      <div class="content has-text-justified">
+        <p>
+          For Bells and Whistles, I wanted to try to morph my face with an average South Asian Female face I found online. 
+          I first had to resize my face image to be the same size as the female face and manually added correspondences on key facial features for both images. 
+        </p>
+
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/6/resized_avg_crop.jpg" alt="Laplacian [0]">
+              <caption>My Face</caption>
+          </div>
+          <div class="image-item">
+              <img src="static/images/6/avg_face_shape.png" alt="Laplacian [1]">
+              <caption>Average Face Shape</caption>
+          </div>
+          <div class="image-item">
+              <img src="static/images/6/avg_female.jpeg" alt="Laplacian [2]">
+              <caption>Average South Asian Female Face</caption>
+          </div>
+        </div>
+
+        <p>
+          To morph just the shape (warp), I warped my face onto the average female face.
+          To morph just the appearance (cross-dissolve), I warped the average female on to my face.
+          To morph both shape and appearance, I used my morph function (warp and cross-dissolve) with warp_frac = 0.5 and dissolve_frac = 0.5
+        </p>
+
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/6/shape.png" alt="Laplacian [0]">
+              <caption>Shape</caption>
+          </div>
+          <div class="image-item">
+              <img src="static/images/6/appearance.png" alt="Laplacian [1]">
+              <caption>Appearance</caption>
+          </div>
+          <div class="image-item">
+              <img src="static/images/6/both.png" alt="Laplacian [2]">
+              <caption>Both Shape + Appearance</caption>
+          </div>
+        </div>
+
+        <p>
+          I can notice that when I morphed both shape and appearance, it blends both very well. 
+          Increasing the warp_frac would give me more feminine features from the average female image and decreasing the warp_frac would give me more of my own features
+        </p>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  </body>
+  </html>
