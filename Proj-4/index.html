@@ -87,7 +87,7 @@
         <h2 class="title is-3">Overview - Part 4A</h2>
         <div class="content has-text-justified">
           <p>
-            In this project, I will compute homographies between two or more images and warp them to create mosaics. 
+            In this project, I will compute homographies between images and warp them to create mosaics. 
             This will require taking photographs of various subjects, computing homographies, warping images, stitching, blending, and more. 
           </p>
         </div>
@@ -169,7 +169,7 @@
 <section class="hero is-small is-light">
   <div class="hero-body">
     <div class="container">
-      <h2 class="title is-3">Part 2: Recover Homographies"</h2>
+      <h2 class="title is-3">Part 2: Recover Homographies</h2>
       <div class="content has-text-justified">
         <p>
           Before we can put together a mosaic, we need to compute the parameters of the transformation AKA the homography in this case. 
@@ -218,6 +218,9 @@
           Now, we can perform an inverse warp on the points in the bounding box to get where they come from in image A. 
           Finally, we can interpolate these pixels from image A to the warped image. 
 
+          <br>
+          <br>
+          
           Here are some images that I rectified to be frontal parallel. 
           For each one, since I don't have another image to select correspondences for, I manually created correspondences in the form of something about the subject (ex. rectangular for my objects):
 
