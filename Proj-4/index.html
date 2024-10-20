@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>Project 4</title>
+  <link rel="icon" type="image/x-icon" href="static/images/4/wheeler-blended.jpeg">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Project 4: [Auto]Stitching Photo Mosaics</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block">Ryan Mathew<br>October 18th, 2024</span>
+                  </div>
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/ryanmathew-berkeley/ryanmathew-berkeley.github.io" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Website Repo</span>
+                  </a>
+                </span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview - Part 4A</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this project, I will compute homographies between two or more images and warp them to create mosaics. 
+            This will require taking photographs of various subjects, computing homographies, warping images, stitching, blending, and more. 
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 1: Shoot and Digitize Pictures</h2>
+      <div class="content has-text-justified">
+        <p>
+          Before starting to work on the project, 
+          I first needed to source pictures that I would use when creating mosaics. 
+          I decided to capture various buildings around campus for my mosaics as well as items in my apartment to test rectification.
+          Utilizing my phone camera, I locked certain settings such as focus and exposure and took pictures from the same center of projection. 
+        </p>
+
+        <p>Here are the images that I will rectify to test my warp function:</p>
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/1/card.jpeg" alt="Image 1">
+            <div class="caption"><b>Card</b></div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/1/car.jpeg" alt="Image 1">
+            <div class="caption"><b>Car</b></div>
+          </div>
+        </div>
+        
+        <p>Here are the images that I will use when creating mosaics.</p>
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/1/campanile_left.jpeg" alt="Image 1">
+            <div class="caption"><b>Campanile Left</b></div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/1/campanile_middle.jpeg" alt="Image 1">
+            <div class="caption"><b>Campanile Middle</b></div>
+          </div>
+        </div>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/1/library_left.jpeg" alt="Image 1">
+            <div class="caption"><b>Library Left</b></div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/1/library_middle.jpeg" alt="Image 1">
+            <div class="caption"><b>Library Middle</b></div>
+          </div>
+        </div>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/1/wheeler_left.jpeg" alt="Image 1">
+            <div class="caption"><b>Wheeler Hall Left</b></div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/1/wheeler_middle.jpeg" alt="Image 1">
+            <div class="caption"><b>Wheeler Hall Middle</b></div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/1/wheeler_right.jpeg" alt="Image 1">
+            <div class="caption"><b>Wheeler Hall Right</b></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 2: Recover Homographies"</h2>
+      <div class="content has-text-justified">
+        <p>
+          Before we can put together a mosaic, we need to compute the parameters of the transformation AKA the homography in this case. 
+          To recover the homography H, we can set up a transformation p' = H * p where H is a 3x3 matrix with 8 degrees of freedom.
+          We will need to create correspondences between the two images using the tool at this <a href="https://cal-cs180.github.io/fa23/hw/proj3/tool.html">link</a> similar to how we did in the previous project.
+          With more than 4 point correspondences, we can create an overdetermined system of equations that can be solved using least squares.
+          <br>
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/2/homography.png" alt="Image 1">
+            </div>
+          </div>
+
+          If we expand it out, we can add as many points as we have as correspondences, stack them in the matrix, and solve using least squares to recover the homography matrix
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/2/lin-alg.png" alt="Image 1">
+            </div>
+          </div>
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/2/system.png" alt="Image 1">
+            </div>
+          </div>
+
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 3: Warp the Images (Rectification)</h2>
+      <div class="content has-text-justified">
+        <p>
+          Using the homography matrix which we found in the previous part, we can use it to warp 1 image and project it onto another so it can be stitched together. 
+          If we want to warp image A onto image B, we will first take the corners of image A and apply the homography to get the corners in image B. 
+          From here, we know the "bounding box" of where points in image A fall in image B. 
+          Now, we can perform an inverse warp on the points in the bounding box to get where they come from in image A. 
+          Finally, we can interpolate these pixels from image A to the warped image. 
+
+          Here are some images that I rectified to be frontal parallel. 
+          For each one, since I don't have another image to select correspondences for, I manually created correspondences in the form of something about the subject (ex. rectangular for my objects):
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/3/card.jpeg" alt="Image 1">
+                <div class="caption">Playing Card</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/3/card-rectified.jpeg" alt="Image 1">
+              <div class="caption">Playing Card (Rectified)</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/3/card-rectified-zoomed.png" alt="Image 1">
+              <div class="caption">Playing Card (Rectified Zoomed)</div>
+            </div>
+          </div>
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/3/car.jpeg" alt="Image 1">
+                <div class="caption">Car</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/3/car-rectified.jpeg" alt="Image 1">
+              <div class="caption">Car (Rectified)</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/3/car-rectified-zoomed.png" alt="Image 1">
+              <div class="caption">Car (Rectified Zoomed)</div>
+            </div>
+          </div>
+
+          <br>
+
+          We can see that the warp works and the images are in fact rectified to be frontal parallel. This tool will be crucial in warping one image onto another as we'll see in the next section.
+          
+
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 4: Create Mosaics</h2>
+      <div class="content has-text-justified">
+        <p>
+          Now that we are able to compute homographies from correspondences between images and rectify them, we can create mosaics.
+          First, we will use the homography between image A and B to warp A onto B. 
+          We can now compute the final mosaic size by taking the difference between the max and min location for x and y between the warped image A and image B. 
+          From here, we can simply position each image so that they are 'stitched' together. 
+          However, this results in subpar mosaics as a seam can be seen running through the image.
+          To fix this, we will simply perform feathering (weighted averaging) to 'blend' the images. 
+          <br>
+          <br> 
+          Once we have the second image and the warped image, we can 'feather' each of them in which we add an alpha channel (mask) that makes the edges smoother.
+          The edges will be more transparent while the parts closer to the center will remain opaque.
+          Because this is applied where the images overlap, it will blend nicely. 
+          Now, just add the warped image A in the correct location of the mosaic and blend when adding image B.
+
+          <br>
+          <br>
+          For 3 image mosaics such as the last example below, the process is very similar.
+          If image B is the 'middle' image, we will need to warp image A and image C onto image B.
+          From here, do the same feathering and adding/blending to the output mosaic for all 3 images.
+        
+
+          <h1>2 Image Mosaics</h1>
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/campanile_left.jpeg" alt="Image 1">
+                <div class="caption">Campanile Left</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/campanile_middle.jpeg" alt="Image 1">
+              <div class="caption">Campanile Middle</div>
+            </div>
+          </div>
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/campanile-unblended.jpeg" alt="Image 1">
+                <div class="caption">Campanile Mosaic (Unblended)</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/campanile-blended.jpeg" alt="Image 1">
+              <div class="caption">Campanile Mosaic (Blended)</div>
+            </div>
+          </div>
+
+          <br>
+          <br>
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/library_left.jpeg" alt="Image 1">
+                <div class="caption">Library Left</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/library_middle.jpeg" alt="Image 1">
+              <div class="caption">Library Middle</div>
+            </div>
+          </div>
+          
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/library-unblended.jpeg" alt="Image 1">
+                <div class="caption">Library Mosaic (Unblended)</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/library-blended.jpeg" alt="Image 1">
+              <div class="caption">Library Mosaic (Blended)</div>
+            </div>
+          </div>
+
+
+          <h1>3 Image Mosaic</h1>
+
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/wheeler_left.jpeg" alt="Image 1">
+                <div class="caption">Wheeler Hall Left</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/wheeler_middle.jpeg" alt="Image 1">
+              <div class="caption">Wheeler Hall Middle</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/wheeler_right.jpeg" alt="Image 1">
+              <div class="caption">Wheeler Hall Right</div>
+            </div>
+          </div>
+          
+          <div class="image-container">
+            <div class="image-item">
+                <img src="static/images/4/wheeler-unblended.jpeg" alt="Image 1">
+                <div class="caption">Wheeler Hall Mosaic (Unblended)</div>
+            </div>
+            <div class="image-item">
+              <img src="static/images/4/wheeler-blended.jpeg" alt="Image 1">
+              <div class="caption">Wheeler Hall Mosaic (Blended)</div>
+            </div>
+          </div>
+
+
+          <br>
+          As you can see, most of the unblended mosaics have a visible seam (Hover over picture to expand). 
+          The blended mosaics do a great job of mixing the surrounding pixels so the seams are no longer clearly apparent. 
+          I also found that point correspondence selection is key as your warps might not be properly aligned until you select enough essential points and achieve a good homography.
+          
+
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  </body>
+  </html>
