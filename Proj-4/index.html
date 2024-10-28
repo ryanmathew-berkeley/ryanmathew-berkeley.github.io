@@ -384,18 +384,525 @@
   </div>
 </section>
 
-<section class="hero is-small"></section>
+<section class="hero is-small">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">Project 4A: Takeaways</h2>
       <div class="content has-text-justified">
         <p>I enjoyed working on this project and learning how to compute homographies as well as warp images to create interesting mosaics of multiple images. 
           I realized that it is important to pick many good correspondences to achieve good results. 
-          This will help me to appreciate the project 4b much more!</p>
+          This will help me to appreciate project 4b much more!
+        </p>
       </div>
     </div>
   </div>
 </section>
+
+
+
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview - Part 4B</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this project, I will stitch images together without manually defining their correspondence points.
+            We will utilize Harris corner detection and more to automatically find optimal corners and use them to stitch and blend images as we did in the previous part.
+            I referenced the paper "Multi-Image Matching using Multi-Scale Oriented Patches" at this <a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/Papers/MOPS.pdf">link</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 1: Detecting Corner Features in an Image</h2>
+      <div class="content has-text-justified"></div>
+        <p>
+          We first need to obtain potential keypoints on our images.
+          When manually tagging points on our images, the ideal locations would be corners.
+          Therefore, we can use the Harris Corner Detector to generate corners that may or may not be used for alignment.
+          Using the code in harris.py, I passed in my black and white image and received coordinates of corner points as well as a matrix 'h' with the corner strength of each pixel. 
+          Here are the results of overlaying the potential corners on my images:
+        </p>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b1/campanile_left_harris.png" alt="Image 1">
+              <div class="caption">Harris Corners on Campanile Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b1/campanile_middle_harris.png" alt="Image 1">
+            <div class="caption">Harris Corners on Campanile Middle</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b1/library_left_harris.png" alt="Image 1">
+              <div class="caption">Harris Corners on Library Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b1/library_middle_harris.png" alt="Image 1">
+            <div class="caption">Harris Corners on Library Middle</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b1/wheeler_left_harris.png" alt="Image 1">
+              <div class="caption">Harris Corners on Wheeler Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b1/wheeler_middle_harris.png" alt="Image 1">
+            <div class="caption">Harris Corners on Wheeler Middle</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b1/wheeler_right_harris.png" alt="Image 1">
+            <div class="caption">Harris Corners on Wheeler Right</div>
+          </div>
+        </div>
+
+
+        <br>
+        <p>
+          There are clearly too many points to be useful and efficient so we will work on narrowing down the options. 
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 2: Adaptive Non-Maximal Suppression (ANMS)</h2>
+      <div class="content has-text-justified">
+        As we saw from the previous part, there are too many corner points so we need to filter some out to be more efficient. 
+        We can do so using the technique of Adaptive Non-Maximal Suppression (ANMS).
+        ANMS first gets all the pairwise distances between all corners. 
+        Then for every corner, it will rank that corner i with the minimum distance r[i] to a stronger corner. 
+        Finally, the rankings will be sorted so we get the corners with largest r[i] or those that are farthest from stronger corners. 
+        Formally, we satisfy this:
+
+        <br>
+        <br>
+
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b2/anms.png" alt="Image 1">
+          </div>
+        </div>
+
+        <br>
+
+
+        We can choose the top n corners. Here, I apply ANMS with n=500 and c_robust=0.9 on the corners I got from the Harris Corner Detector:
+
+
+        <br>
+        <br>
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b2/campanile_left_anms.png" alt="Image 1">
+              <div class="caption">ANMS Corners on Campanile Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b2/campanile_middle_anms.png" alt="Image 1">
+            <div class="caption">ANMS Corners on Campanile Middle</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b2/library_left_anms.png" alt="Image 1">
+              <div class="caption">ANMS Corners on Library Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b2/library_middle_anms.png" alt="Image 1">
+            <div class="caption">ANMS Corners on Library Middle</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b2/wheeler_left_anms.png" alt="Image 1">
+              <div class="caption">ANMS Corners on Wheeler Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b2/wheeler_middle_anms.png" alt="Image 1">
+            <div class="caption">ANMS Corners on Wheeler Middle</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b2/wheeler_right_anms.png" alt="Image 1">
+            <div class="caption">ANMS Corners on Wheeler Right</div>
+          </div>
+        </div>
+
+        <br>
+
+
+        With this, we're able to narrow down the points to the 'best' n points and make future computation easier. 
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 3: Extracting Feature Descriptors + Feature Matching</h2>
+      <div class="content has-text-justified"></div>
+        Now that we have a decent amount of keypoints for each image, we need to figure out how to match them between images. 
+        We can extract feature descriptors for each keypoint that captures essential information around the point which can be compared and matched to descriptors of points in other images.
+        Specifically, for each point in the image, we'll take a M by M window of pixels around it and resize it to an N by N patch which blurs it and allows us to suppress any noise.
+        The descriptor is then normalized to filter any other noise.
+        I used a window size of M=40 and patch size of N=8.
+
+        <br>
+        <br>
+
+        Now that we have these descriptors for each point in image, we can move on to using them to match points between different images.
+        For every point X's descriptor in one image, we will calculate the pairwise distance from it to all descriptors of another image. 
+        We sort by the smallest distance and take the ratio of the nearest neighbor to the second nearest neighbor.
+        If the ratio is smaller than some threshold t, we will map that point X to the point of the nearest neighbor descriptor.
+
+        This will give us point correspondences between 2 images without having to manually select them like we did in earlier parts.
+        Here are the feature matched corners between images and their correspondences:
+
+        <br>
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b3/campanile_left_matched.png" alt="Image 1">
+              <div class="caption">Feature Matched Corners on Campanile Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b3/campanile_middle_matched.png" alt="Image 1">
+            <div class="caption">Feature Matched Corners on Campanile Middle</div>
+          </div>
+        </div>
+
+        <br>
+
+        <img src="static/images/b3/campanile_matched.png" alt="Image 1" style="display: block; margin-left: auto; margin-right: auto;">
+
+        <br>
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b3/library_left_matched.png" alt="Image 1">
+              <div class="caption">Feature Matched Corners on Library Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b3/library_middle_matched.png" alt="Image 1">
+            <div class="caption">Feature Matched Corners on Library Middle</div>
+          </div>
+        </div>
+
+        <br>
+
+        <img src="static/images/b3/library_matched.png" alt="Image 1" style="display: block; margin-left: auto; margin-right: auto;">
+
+        <br>
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b3/wheeler_left_matched.png" alt="Image 1">
+              <div class="caption">Feature Matched Corners on Wheeler Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b3/wheeler_middle_matched-1.png" alt="Image 1">
+            <div class="caption">Feature Matched Corners on Wheeler Middle</div>
+          </div>
+        </div>
+
+        <br>
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b3/wheeler_middle_matched-3.png" alt="Image 1">
+              <div class="caption">Feature Matched Corners on Wheeler Middle</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b3/wheeler_right_matched.png" alt="Image 1">
+            <div class="caption">Feature Matched Corners on Wheeler Right</div>
+          </div>
+        </div>
+        
+        <br>
+
+        <div style="display: flex; justify-content: center; align-items: center; width: 100%; gap: 20px;">
+          <img src="static/images/b3/wheeler_matched-1.png" alt="Image 1" style="width: 48%; max-width: 800px;">
+          <img src="static/images/b3/wheeler_matched-3.png" alt="Image 2" style="width: 48%; max-width: 800px;">
+        </div>
+      
+        <br>
+
+        We can see that many points that didn't have a 'good' correspondence with another point were filtered out. 
+        However, some points were incorrectly matched with others. 
+        That is fine for now as we will handle this in the next step. 
+        The processing we just did will make it easier to find a good homography. 
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 4: Random Sample Consensus (RANSAC)</h2>
+      <div class="content has-text-justified">
+        Now that we have correspondences, we want to be able to compute a homography between two images. 
+        However, we may have outliers that can affect our homography computation. 
+        We can use Random Sample Consenses (RANSAC) to do a final filtering step and achieve a good homography. 
+        <br>
+        <br>
+        Here are the 5 steps for RANSAC:
+        <br>
+        1. Select four feature pairs (at random)
+        <br>
+        2. Compute homography H (exact)
+        <br>
+        3. Compute inliers where dist(point_i, Homography of point_i) < ε
+        <br>
+        4. Keep largest set of inliers
+        <br>
+        5. Re-compute least-squares H estimate on all of the inliers
+
+        <br>
+        <br>
+        We repeat the first 4 steps for number of iterations N. 
+        From this, we can obtain the final point correspondences between the two images and the homography H. 
+        Here are the overlayed points from running RANSAC between images. I used N=10000 and ε=5:
+        <br>
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b4/ransac_campanile_left.png" alt="Image 1">
+              <div class="caption">RANSAC Corners on Campanile Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b4/ransac_campanile_middle.png" alt="Image 1">
+            <div class="caption">RANSAC Corners on Campanile Middle</div>
+          </div>
+        </div>
+
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b4/ransac_library_left.png" alt="Image 1">
+              <div class="caption">RANSAC Corners on Library Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b4/ransac_library_middle.png" alt="Image 1">
+            <div class="caption">RANSAC Corners on Library Middle</div>
+          </div>
+        </div>
+
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+              <img src="static/images/b4/ransac_wheeler_left.png" alt="Image 1">
+              <div class="caption">RANSAC Corners on Wheeler Left</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b4/ransac_wheeler_middle-1.png" alt="Image 1">
+            <div class="caption">RANSAC Corners on Wheeler Middle</div>
+          </div>
+        </div>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/b4/ransac_wheeler_middle-3.png" alt="Image 1">
+            <div class="caption">RANSAC Corners on Wheeler Middle</div>
+          </div>
+          <div class="image-item">
+            <img src="static/images/b4/ransac_wheeler_right.png" alt="Image 1">
+            <div class="caption">RANSAC Corners on Wheeler Right</div>
+          </div>
+        </div>
+
+
+        <br>
+
+        The points that we had prior to running RANSAC might have already been pretty good. 
+        However, we can notice that RANSAC is able to get rid of some extra and maybe erroneous points and only keep the ones that result in the best homography. 
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Part 5: Autostitching and Blending Mosaics</h2>
+      <div class="content has-text-justified"></div>
+        Now that we have the point correspondences and homographies, we are able to repeat our steps from Project 4a and automatically stitch and blend our images to create mosaics!
+        Here are the results of doing it automatically vs manually defining correspondences:
+
+        <br>
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/b5/auto-campanile-unblended.jpeg" alt="Image 1">
+            <div class="caption">Automatic Unblended Campanile</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/4/campanile-unblended.jpeg" alt="Image 1">
+              <div class="caption">Manual Unblended Campanile</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/b5/auto-campanile-blended.jpeg" alt="Image 1">
+            <div class="caption">Automatic Blended Campanile</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/4/campanile-blended.jpeg" alt="Image 1">
+              <div class="caption">Manual Blended Campanile</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/b5/auto-library-unblended.jpeg" alt="Image 1">
+            <div class="caption">Automatic Unblended Library</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/4/library-unblended.jpeg" alt="Image 1">
+              <div class="caption">Manual Unblended Library</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/b5/auto-library-blended.jpeg" alt="Image 1">
+            <div class="caption">Automatic Blended Library</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/4/library-blended.jpeg" alt="Image 1">
+              <div class="caption">Manual Blended Library</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/b5/auto-wheeler-unblended.jpeg" alt="Image 1">
+            <div class="caption">Automatic Unblended Wheeler</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/4/wheeler-unblended.jpeg" alt="Image 1">
+              <div class="caption">Manual Unblended Wheeler</div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="image-container">
+          <div class="image-item">
+            <img src="static/images/b5/auto-wheeler-blended.jpeg" alt="Image 1">
+            <div class="caption">Automatic Blended Wheeler</div>
+          </div>
+          <div class="image-item">
+              <img src="static/images/4/wheeler-blended.jpeg" alt="Image 1">
+              <div class="caption">Manual Blended Wheeler</div>
+          </div>
+        </div>
+
+        <br>
+
+        <center><b>HOVER OVER ANY IMAGE TO SEE LARGER VIEW</b></center>
+
+        <br>
+
+
+        The mosaics created from manually defined correspondences are better aligned than the automatic ones in my opinion but the error is very small and I am overall pleased with the results.
+        While maybe not as perfectly aligned as I hoped, it is definitely more convenient than having to manually select correspondences.
+        If I had more time, I would try to play around with the parameters like thresholds, epsilons, etc to see if I can get more/better points to improve the alignment. 
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Project 4B - Takeaways </h2>
+      <div class="content has-text-justified">
+        I enjoyed working on both parts of this project and was very pleased with how it turned out. 
+        The coolest thing I learned from the project was how to automatically find correspondences using corner detection and other tricks as manually selecting them like in part 4A can take a while. 
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- <section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3"> </h2>
+      <div class="content has-text-justified"></div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3"> </h2>
+      <div class="content has-text-justified">
+        
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+
+
 
 
 
